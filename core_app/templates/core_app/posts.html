@@ -1,0 +1,26 @@
+{% extends 'core_app/base.html' %}
+{% block content %}
+
+<h1 style="text-align:center; margin-bottom:24px;">Browse</h1>
+
+<div class="posts-container">
+    {% for Post in posts %}
+    <div class="post-card">
+        {% if user.username == Post.user.username or user.is_superuser %}
+        <div class="post-actions">
+            <a href="{% url 'update_post_view' Post.pk %}" class="btn btn-ghost small-btn">Edit</a>
+            <a href="{% url 'delete_post_view' Post.pk %}" class="btn btn-ghost small-btn">Delete</a>
+        </div>
+        {% endif %}
+        <div class="post-author-info">
+            <img src="{{Post.user.profile.avatarURL}}"
+            <p class="post-user">@{{ Post.user.username }}</p>
+        </div>
+        <h3 class="post-title">{{ Post.title }}</h3>
+        <p class="post-content">{{ Post.content }}</p>
+        <p class="post-time">{{ Post.created_at|timesince }} ago</p>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

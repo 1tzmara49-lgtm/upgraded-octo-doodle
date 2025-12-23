@@ -1,0 +1,17 @@
+{% extends 'core_app/base.html' %}
+{% block content %}
+
+<div class="auth-card">
+    <h1>New Post</h1>
+
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        {{ form }}
+
+        <button type="submit" class="btn btn-primary auth-btn">
+            Publish
+        </button>
+    </form>
+</div>
+
+{% endblock %}

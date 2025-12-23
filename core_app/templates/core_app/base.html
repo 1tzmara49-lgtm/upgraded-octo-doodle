@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Twitterlike</title>
+
+    <style>
+        :root {
+            --bg: #000;
+            --bg-soft: #16181c;
+            --text: #e7e9ea;
+            --text-muted: #71767b;
+            --accent: #1d9bf0;
+            --border: #2f3336;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, Arial, sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* HEADER */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--accent);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .username {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn-ghost {
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-ghost:hover {
+            background: var(--bg-soft);
+        }
+
+        /* MAIN CONTENT */
+        main {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 16px;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            text-align: center;
+            padding: 12px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        /* AUTH PAGES */
+        .auth-card {
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 420px;
+            margin: 80px auto;
+            text-align: center;
+        }
+
+        .auth-card h1 {
+            margin-bottom: 24px;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* Django form inputs */
+        .auth-form input {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 15px;
+            color: var(--text);
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .auth-btn {
+            margin-top: 8px;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        .auth-footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .auth-footer a {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* POSTS */
+        .posts-container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 0 16px;
+        }
+
+        .post-card {
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .post-actions {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .post-user {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .post-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .post-content {
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .post-time {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        .small-btn {
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 999px;
+        }
+        /* Avatar in header */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-info .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 9000px;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            overflow: hidden;
+        }
+
+        .post-author-info{
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .post-author-info img{
+            height: 48px;
+            width: 48px;
+            border-radius: 90000px;
+            border: 1px solid #fff;
+        }
+        /* Reuse auth-card & auth-form styling for post editing */
+
+        .auth-card {
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 500px;
+            margin: 60px auto;
+            text-align: center;
+        }
+
+        .auth-card h1 {
+            margin-bottom: 24px;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .auth-form input,
+        .auth-form textarea,
+        .auth-form select {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 15px;
+            color: var(--text);
+            width: 100%;
+        }
+
+        .auth-form input:focus,
+        .auth-form textarea:focus,
+        .auth-form select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .auth-btn {
+            margin-top: 8px;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 999px;
+        }
+        /* Danger button for deletion */
+        .btn-danger {
+            background: #f56565;
+            color: #fff;
+            border-radius: 999px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-danger:hover {
+            filter: brightness(1.1);
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <a href="{% url 'post_list'%}" class="logo">Twitterlike</a>
+
+        <div class="nav">
+            {% if user.is_authenticated %}
+            <div class="user-info">
+                <a href="{% url 'edit_profile_view' %}">
+                    <img src="{{ user.profile.avatarURL }}" class="avatar">
+                </a>
+                <span class="username">@{{ user.username }}</span>
+                <a href="{% url 'create_post_view' %}" class="btn btn-primary">Post</a>
+                <a href="{% url 'logout_view' %}" class="btn btn-ghost">Log out</a>
+            </div>
+
+            {% else %}
+            <a href="{% url 'login_view' %}" class="btn btn-ghost">Log in</a>
+            <a href="{% url 'register_view' %}" class="btn btn-primary">Sign up</a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer>
+    <p>© Twitterlike</p>
+</footer>
+
+</body>
+</html>
